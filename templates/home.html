@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Employee Project Management System</h1>
+
+<p>Total Employees: {{ total_employees }}</p>
+
+<p>Active Employees: {{ active_employees }}</p>
+
+<p>Total Projects: {{ total_projects }}</p>
+
+<p>Completed Projects: {{ completed_projects }}</p>
+
+<br>
+
+<a href="{% url 'employee_list' %}">
+    View Employees
+</a>
+
+<br><br>
+
+<a href="{% url 'project_list' %}">
+    View Projects
+</a>
+
+{% endblock %}

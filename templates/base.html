@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Project Management System</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        |
+        <a href="{% url 'employee_list' %}">Employees</a>
+        |
+        <a href="{% url 'project_list' %}">Projects</a>
+        |
+        <a href="/admin/">Admin</a>
+    </nav>
+
+    <hr>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>
