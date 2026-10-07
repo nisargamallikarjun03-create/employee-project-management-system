@@ -1,29 +1,361 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Employee Project Management System</title>
+<html lang="en">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        Employee Project Management System
+        {% endblock %}
+    </title>
+
+
+    <!-- ================= FONT ================= -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- ================= INLINE CSS ================= -->
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            background-color: #f2f1ee;
+
+            color: #303030;
+
+            font-family: 'Inter', sans-serif;
+
+            line-height: 1.6;
+        }
+
+
+        /* ================= NAVIGATION ================= */
+
+        nav {
+            background-color: #292929;
+
+            min-height: 75px;
+
+            padding: 0 55px;
+
+            display: flex;
+
+            align-items: center;
+
+            border-bottom: 1px solid #555;
+        }
+
+
+        .nav-brand {
+            display: flex;
+
+            flex-direction: column;
+
+            margin-right: auto;
+        }
+
+
+        .brand-main {
+            color: #f2f1ee;
+
+            font-family: 'Cormorant Garamond', serif;
+
+            font-size: 32px;
+
+            font-weight: 700;
+
+            letter-spacing: 4px;
+
+            line-height: 1;
+        }
+
+
+        .brand-subtitle {
+            color: #a9a7a2;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+
+            margin-top: 5px;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+        }
+
+
+        .nav-links a {
+            color: #d8d6d1;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            letter-spacing: 0.7px;
+
+            padding: 8px 0;
+        }
+
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+
+        .admin-link {
+            border: 1px solid #777;
+
+            padding: 8px 18px !important;
+        }
+
+
+        .admin-link:hover {
+            background-color: #eeeeee;
+
+            color: #292929 !important;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        main {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 55px 35px 80px;
+        }
+
+
+        /* ================= HEADINGS ================= */
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+
+            color: #292929;
+        }
+
+
+        h1 {
+            font-size: 46px;
+
+            font-weight: 600;
+
+            margin-top: 0;
+        }
+
+
+        h2 {
+            font-size: 30px;
+
+            margin-top: 40px;
+        }
+
+
+        p {
+            color: #5d5d5d;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 30px 35px 40px;
+
+            text-align: center;
+
+            color: #777;
+        }
+
+
+        .footer-line {
+            height: 1px;
+
+            background-color: #d0cec9;
+
+            margin-bottom: 20px;
+        }
+
+
+        footer p {
+            margin: 0;
+
+            font-family: 'Cormorant Garamond', serif;
+
+            font-size: 18px;
+        }
+
+
+        footer span {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            color: #999;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 18px 25px;
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 18px;
+            }
+
+
+            .nav-brand {
+                margin-right: 0;
+            }
+
+
+            .nav-links {
+                width: 100%;
+
+                justify-content: space-between;
+
+                flex-wrap: wrap;
+
+                gap: 10px;
+            }
+
+
+            main {
+                padding: 35px 20px 60px;
+            }
+
+
+            h1 {
+                font-size: 38px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
+
+    <!-- ================= NAVIGATION ================= -->
+
     <nav>
-        <a href="{% url 'home' %}">Home</a>
-        |
-        <a href="{% url 'employee_list' %}">Employees</a>
-        |
-        <a href="{% url 'project_list' %}">Projects</a>
-        |
-        <a href="/admin/">Admin</a>
+
+        <div class="nav-brand">
+
+            <span class="brand-main">
+                EPMS
+            </span>
+
+            <span class="brand-subtitle">
+                Employee Project Management
+            </span>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'employee_list' %}">
+                Employees
+            </a>
+
+            <a href="{% url 'project_list' %}">
+                Projects
+            </a>
+
+            <a href="/admin/" class="admin-link">
+                Admin
+            </a>
+
+        </div>
+
     </nav>
 
-    <hr>
 
-    {% block content %}
-    {% endblock %}
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-line"></div>
+
+        <p>
+            Employee Project Management System
+        </p>
+
+        <span>
+            Django Management Portal
+        </span>
+
+    </footer>
+
 
 </body>
+
 </html>

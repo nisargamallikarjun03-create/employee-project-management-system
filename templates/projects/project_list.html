@@ -1,50 +1,249 @@
 {% extends "base.html" %}
 
+{% block title %}
+Projects | Employee Project Management System
+{% endblock %}
+
 {% block content %}
 
-<h1>Projects</h1>
+<style>
+    .page-header {
+        border-bottom: 1px solid #c9c7c2;
+        padding-bottom: 25px;
+        margin-bottom: 30px;
+    }
 
-<table border="1">
+    .page-label {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 12px;
+        color: #777;
+        margin-bottom: 8px;
+    }
 
-    <tr>
-        <th>Project</th>
-        <th>Client</th>
-        <th>Manager</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
+    .page-header h1 {
+        margin: 0;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 46px;
+        color: #292929;
+    }
 
-    {% for project in projects %}
+    .decorative-line {
+        width: 60px;
+        height: 2px;
+        background-color: #555;
+        margin: 18px 0;
+    }
 
-    <tr>
+    .page-description {
+        color: #6b6965;
+        max-width: 650px;
+    }
 
-        <td>{{ project.project_name }}</td>
+    .project-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border: 1px solid #d2d0cb;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    }
 
-        <td>{{ project.client_name }}</td>
+    .project-table th {
+        background-color: #303030;
+        color: white;
+        padding: 15px 14px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-        <td>
-            {{ project.project_manager.name }}
-        </td>
+    .project-table td {
+        padding: 16px 14px;
+        border-bottom: 1px solid #e0ded9;
+        color: #4a4a4a;
+        font-size: 14px;
+    }
 
-        <td>{{ project.status }}</td>
+    .project-table tr:last-child td {
+        border-bottom: none;
+    }
 
-        <td>
-            <a href="{% url 'project_detail' project.id %}">
-                View
-            </a>
-        </td>
+    .project-table tbody tr:hover td {
+        background-color: #f7f6f3;
+    }
 
-    </tr>
+    .project-name {
+        font-weight: 600;
+        color: #303030;
+    }
 
-    {% empty %}
+    .project-link {
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px solid #999;
+        padding-bottom: 2px;
+    }
 
-    <tr>
-        <td colspan="5">
-            No projects found.
-        </td>
-    </tr>
+    .project-link:hover {
+        color: #000;
+        border-color: #000;
+    }
 
-    {% endfor %}
+    .status {
+        display: inline-block;
+        padding: 5px 10px;
+        border: 1px solid #bbb8b2;
+        font-size: 12px;
+        color: #555;
+        background-color: #f7f6f3;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 45px 20px;
+        color: #777;
+        background-color: #faf9f7;
+    }
+
+    .empty-message h3 {
+        margin-top: 0;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 25px;
+        color: #555;
+    }
+
+    @media (max-width: 700px) {
+
+        .page-header h1 {
+            font-size: 38px;
+        }
+
+        .project-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+</style>
+
+
+<section class="page-header">
+
+    <div class="page-label">
+        Project Directory
+    </div>
+
+    <h1>
+        Projects
+    </h1>
+
+    <div class="decorative-line"></div>
+
+    <p class="page-description">
+        View projects, their clients, managers, status,
+        and project timelines.
+    </p>
+
+</section>
+
+
+<table class="project-table">
+
+    <thead>
+
+        <tr>
+            <th>Project Name</th>
+            <th>Client</th>
+            <th>Project Manager</th>
+            <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Action</th>
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        {% for project in projects %}
+
+        <tr>
+
+            <td class="project-name">
+                {{ project.project_name }}
+            </td>
+
+            <td>
+                {{ project.client_name }}
+            </td>
+
+            <td>
+                {% if project.project_manager %}
+                    {{ project.project_manager.name }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </td>
+
+            <td>
+
+                <span class="status">
+                    {{ project.status }}
+                </span>
+
+            </td>
+
+            <td>
+                {{ project.start_date }}
+            </td>
+
+            <td>
+                {{ project.end_date }}
+            </td>
+
+            <td>
+
+                <a
+                    href="{% url 'project_detail' project.id %}"
+                    class="project-link"
+                >
+                    View Details
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="7">
+
+                <div class="empty-message">
+
+                    <h3>
+                        No Projects Found
+                    </h3>
+
+                    <p>
+                        There are currently no projects
+                        registered in the system.
+                    </p>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
 
 </table>
 

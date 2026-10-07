@@ -1,87 +1,502 @@
 {% extends "base.html" %}
 
+
+{% block title %}
+Employees | Employee Project Management System
+{% endblock %}
+
+
 {% block content %}
 
-<h1>Employees</h1>
+<style>
 
-<form method="GET">
+    /* ================= PAGE HEADER ================= */
 
-    <label>Department:</label>
+    .page-header {
+        border-bottom: 1px solid #c9c7c2;
 
-    <select name="department">
+        padding-bottom: 25px;
 
-        <option value="">All Departments</option>
+        margin-bottom: 30px;
+    }
 
-        {% for department in departments %}
 
-            <option value="{{ department }}"
-                {% if department == selected_department %}
-                    selected
-                {% endif %}>
-                {{ department }}
+    .page-label {
+        text-transform: uppercase;
+
+        letter-spacing: 3px;
+
+        font-size: 12px;
+
+        color: #777;
+
+        margin-bottom: 8px;
+    }
+
+
+    .page-header h1 {
+        margin: 0;
+
+        font-family: 'Cormorant Garamond', serif;
+
+        font-size: 46px;
+
+        color: #292929;
+    }
+
+
+    .decorative-line {
+        width: 60px;
+
+        height: 2px;
+
+        background-color: #555;
+
+        margin: 18px 0;
+    }
+
+
+    .page-description {
+        color: #6b6965;
+
+        max-width: 650px;
+    }
+
+
+    /* ================= FILTER ================= */
+
+    .filter-box {
+        background-color: #ffffff;
+
+        border: 1px solid #d5d3ce;
+
+        padding: 20px 25px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .filter-box label {
+        font-size: 13px;
+
+        font-weight: 600;
+
+        color: #555;
+
+        margin-right: 10px;
+    }
+
+
+    .filter-box select {
+        padding: 10px 35px 10px 12px;
+
+        background-color: #ffffff;
+
+        border: 1px solid #bbb8b2;
+
+        font-family: 'Inter', sans-serif;
+
+        color: #333;
+
+        outline: none;
+    }
+
+
+    .filter-box select:focus {
+        border-color: #555;
+    }
+
+
+    .filter-button {
+        padding: 10px 20px;
+
+        margin-left: 8px;
+
+        background-color: #303030;
+
+        color: white;
+
+        border: 1px solid #303030;
+
+        cursor: pointer;
+
+        font-family: 'Inter', sans-serif;
+
+        transition: 0.3s;
+    }
+
+
+    .filter-button:hover {
+        background-color: #555;
+    }
+
+
+    /* ================= TABLE ================= */
+
+    .employee-table {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        background-color: white;
+
+        border: 1px solid #d2d0cb;
+
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    }
+
+
+    .employee-table th {
+        background-color: #303030;
+
+        color: white;
+
+        padding: 15px 14px;
+
+        text-align: left;
+
+        font-size: 12px;
+
+        font-weight: 600;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+    }
+
+
+    .employee-table td {
+        padding: 15px 14px;
+
+        border-bottom: 1px solid #e0ded9;
+
+        color: #4a4a4a;
+
+        font-size: 14px;
+    }
+
+
+    .employee-table tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    .employee-table tbody tr:hover td {
+        background-color: #f7f6f3;
+    }
+
+
+    .employee-name {
+        font-weight: 600;
+
+        color: #303030;
+    }
+
+
+    /* ================= STATUS ================= */
+
+    .status-active {
+        color: #3f4b3f;
+
+        font-weight: 600;
+    }
+
+
+    .status-inactive {
+        color: #777;
+
+        font-weight: 600;
+    }
+
+
+    /* ================= VIEW LINK ================= */
+
+    .view-link {
+        color: #333;
+
+        text-decoration: none;
+
+        font-weight: 600;
+
+        border-bottom: 1px solid #999;
+
+        padding-bottom: 2px;
+    }
+
+
+    .view-link:hover {
+        color: #000;
+
+        border-color: #000;
+    }
+
+
+    /* ================= EMPTY MESSAGE ================= */
+
+    .empty-message {
+        text-align: center;
+
+        padding: 45px 20px;
+
+        color: #777;
+
+        background-color: #faf9f7;
+    }
+
+
+    .empty-message h3 {
+        margin-top: 0;
+
+        font-family: 'Cormorant Garamond', serif;
+
+        font-size: 25px;
+
+        color: #555;
+    }
+
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 700px) {
+
+        .page-header h1 {
+            font-size: 38px;
+        }
+
+
+        .filter-box {
+            padding: 18px;
+        }
+
+
+        .filter-box select {
+            width: 100%;
+
+            margin: 8px 0;
+        }
+
+
+        .filter-button {
+            margin-left: 0;
+
+            width: 100%;
+        }
+
+
+        .employee-table {
+            display: block;
+
+            overflow-x: auto;
+
+            white-space: nowrap;
+        }
+
+    }
+
+</style>
+
+
+<!-- ================= PAGE HEADER ================= -->
+
+<section class="page-header">
+
+    <div class="page-label">
+        Employee Directory
+    </div>
+
+
+    <h1>
+        Employees
+    </h1>
+
+
+    <div class="decorative-line"></div>
+
+
+    <p class="page-description">
+        View and manage employee information across the organization.
+    </p>
+
+</section>
+
+
+<!-- ================= DEPARTMENT FILTER ================= -->
+
+<div class="filter-box">
+
+    <form method="GET">
+
+        <label for="department">
+            Department:
+        </label>
+
+
+        <select
+            name="department"
+            id="department"
+        >
+
+            <option value="">
+                All Departments
             </option>
+
+
+            {% for department in departments %}
+
+                <option
+                    value="{{ department }}"
+                    {% if department == selected_department %}
+                        selected
+                    {% endif %}
+                >
+                    {{ department }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <button
+            type="submit"
+            class="filter-button"
+        >
+            Filter
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- ================= EMPLOYEE TABLE ================= -->
+
+<table class="employee-table">
+
+    <thead>
+
+        <tr>
+
+            <th>
+                Employee ID
+            </th>
+
+            <th>
+                Name
+            </th>
+
+            <th>
+                Department
+            </th>
+
+            <th>
+                Designation
+            </th>
+
+            <th>
+                Status
+            </th>
+
+            <th>
+                Action
+            </th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        {% for employee in employees %}
+
+        <tr>
+
+            <td>
+                {{ employee.employee_id }}
+            </td>
+
+
+            <td class="employee-name">
+                {{ employee.name }}
+            </td>
+
+
+            <td>
+                {{ employee.department }}
+            </td>
+
+
+            <td>
+                {{ employee.designation }}
+            </td>
+
+
+            <!-- ================= STATUS ================= -->
+
+            <td>
+
+                {% if employee.is_active %}
+
+                    <span class="status-active">
+                        Active
+                    </span>
+
+                {% else %}
+
+                    <span class="status-inactive">
+                        Inactive
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- ================= VIEW ================= -->
+
+            <td>
+
+                <a
+                    href="{% url 'employee_detail' employee.id %}"
+                    class="view-link"
+                >
+                    View Details
+                </a>
+
+            </td>
+
+        </tr>
+
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="6">
+
+                <div class="empty-message">
+
+                    <h3>
+                        No Employees Found
+                    </h3>
+
+                    <p>
+                        There are currently no employees matching
+                        your selected department.
+                    </p>
+
+                </div>
+
+            </td>
+
+        </tr>
 
         {% endfor %}
 
-    </select>
-
-    <button type="submit">Search</button>
-
-</form>
-
-<br>
-
-<table border="1">
-
-    <tr>
-        <th>Employee ID</th>
-        <th>Name</th>
-        <th>Department</th>
-        <th>Designation</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
-
-    {% for employee in employees %}
-
-    <tr>
-
-        <td>{{ employee.employee_id }}</td>
-
-        <td>{{ employee.name }}</td>
-
-        <td>{{ employee.department }}</td>
-
-        <td>{{ employee.designation }}</td>
-
-        <td>
-
-            {% if employee.is_active %}
-                Active
-            {% else %}
-                Inactive
-            {% endif %}
-
-        </td>
-
-        <td>
-            <a href="{% url 'employee_detail' employee.id %}">
-                View
-            </a>
-        </td>
-
-    </tr>
-
-    {% empty %}
-
-    <tr>
-        <td colspan="6">
-            No employees found.
-        </td>
-    </tr>
-
-    {% endfor %}
+    </tbody>
 
 </table>
+
 
 {% endblock %}

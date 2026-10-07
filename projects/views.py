@@ -3,20 +3,30 @@ from .models import Project
 
 
 def project_list(request):
+
     projects = Project.objects.all()
 
     return render(
         request,
         'projects/project_list.html',
-        {'projects': projects}
+        {
+            'projects': projects,
+        }
     )
 
 
 def project_detail(request, id):
-    project = get_object_or_404(Project, id=id)
+
+    project = get_object_or_404(
+        Project,
+        id=id
+    )
 
     return render(
         request,
         'projects/project_detail.html',
-        {'project': project}
+        {
+            'project': project,
+        }
     )
+    

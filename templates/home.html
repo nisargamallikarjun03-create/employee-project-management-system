@@ -1,27 +1,1025 @@
 {% extends "base.html" %}
 
+{% block title %}
+Dashboard | Employee Project Management System
+{% endblock %}
+
 {% block content %}
 
-<h1>Employee Project Management System</h1>
+<style>
 
-<p>Total Employees: {{ total_employees }}</p>
+    /* =========================
+       HERO SECTION
+    ========================= */
 
-<p>Active Employees: {{ active_employees }}</p>
+    .dashboard-hero {
+        background-color: #292929;
+        color: white;
+        padding: 45px 45px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 35px;
+    }
 
-<p>Total Projects: {{ total_projects }}</p>
+    .dashboard-hero::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border: 1px solid #666;
+        border-radius: 50%;
+        right: -60px;
+        top: -70px;
+    }
 
-<p>Completed Projects: {{ completed_projects }}</p>
+    .dashboard-hero::before {
+        content: "";
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        border: 1px solid #555;
+        border-radius: 50%;
+        right: 30px;
+        bottom: -90px;
+    }
 
-<br>
+    .hero-label {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 11px;
+        color: #aaa;
+        margin-bottom: 10px;
+    }
 
-<a href="{% url 'employee_list' %}">
-    View Employees
-</a>
+    .dashboard-hero h1 {
+        color: #f4f2ee;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 52px;
+        font-weight: 600;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
 
-<br><br>
+    .hero-line {
+        width: 65px;
+        height: 2px;
+        background-color: #aaa;
+        margin: 18px 0;
+    }
 
-<a href="{% url 'project_list' %}">
-    View Projects
-</a>
+    .hero-description {
+        max-width: 650px;
+        color: #c4c2bd;
+        font-size: 15px;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+
+    /* =========================
+       QUICK ACCESS
+    ========================= */
+
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        border-bottom: 1px solid #d0cec9;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+        margin: 0;
+        font-size: 30px;
+    }
+
+    .section-heading span {
+        color: #888;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .quick-access {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 45px;
+    }
+
+    .quick-button {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background-color: #ffffff;
+        border: 1px solid #d5d3ce;
+        padding: 18px 20px;
+        text-decoration: none;
+        color: #303030;
+        transition: 0.3s;
+    }
+
+    .quick-button:hover {
+        background-color: #303030;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .quick-icon {
+        width: 38px;
+        height: 38px;
+        border: 1px solid #aaa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 20px;
+    }
+
+    .quick-text strong {
+        display: block;
+        font-size: 14px;
+    }
+
+    .quick-text span {
+        display: block;
+        font-size: 11px;
+        color: #888;
+        margin-top: 2px;
+    }
+
+    .quick-button:hover .quick-text span {
+        color: #ccc;
+    }
+
+
+    /* =========================
+       STATISTICS
+    ========================= */
+
+    .statistics-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 45px;
+    }
+
+    .stat-card {
+        background-color: #ffffff;
+        border: 1px solid #d5d3ce;
+        padding: 25px;
+        position: relative;
+        min-height: 145px;
+        transition: 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    }
+
+    .stat-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #777;
+        font-weight: 600;
+    }
+
+    .stat-number {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 52px;
+        line-height: 1;
+        margin-top: 15px;
+        color: #292929;
+    }
+
+    .stat-description {
+        color: #999;
+        font-size: 11px;
+        margin-top: 12px;
+    }
+
+
+    /* =========================
+       EMPLOYEE SECTION
+    ========================= */
+
+    .employee-section {
+        margin-bottom: 45px;
+    }
+
+    .employee-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .employee-card {
+        background-color: #ffffff;
+        border: 1px solid #d5d3ce;
+        padding: 22px;
+        position: relative;
+        transition: 0.3s;
+    }
+
+    .employee-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    .employee-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 18px;
+    }
+
+    .employee-avatar {
+        width: 48px;
+        height: 48px;
+        background-color: #303030;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .employee-status {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 5px 8px;
+        border: 1px solid #aaa;
+    }
+
+    .employee-status.active {
+        color: #3f4b3f;
+    }
+
+    .employee-status.inactive {
+        color: #777;
+    }
+
+    .employee-card h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 25px;
+        margin: 0;
+        color: #292929;
+    }
+
+    .employee-designation {
+        font-size: 13px;
+        color: #777;
+        margin-top: 3px;
+    }
+
+    .employee-info {
+        border-top: 1px solid #e5e3df;
+        margin-top: 17px;
+        padding-top: 14px;
+    }
+
+    .employee-info-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        padding: 4px 0;
+    }
+
+    .employee-info-label {
+        color: #999;
+    }
+
+    .employee-info-value {
+        color: #555;
+        font-weight: 500;
+    }
+
+    .employee-view {
+        display: inline-block;
+        margin-top: 15px;
+        color: #333;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 2px;
+    }
+
+    .employee-view:hover {
+        color: #000;
+        border-color: #000;
+    }
+
+
+    /* =========================
+       PROJECT OVERVIEW
+    ========================= */
+
+    .project-section {
+        margin-bottom: 40px;
+    }
+
+    .project-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .project-card {
+        background-color: #ffffff;
+        border: 1px solid #d5d3ce;
+        padding: 22px;
+        transition: 0.3s;
+    }
+
+    .project-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .project-card-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .project-card h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .project-client {
+        color: #888;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    .project-status {
+        border: 1px solid #aaa;
+        padding: 5px 9px;
+        font-size: 10px;
+        white-space: nowrap;
+        height: fit-content;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .project-details {
+        display: flex;
+        gap: 25px;
+        border-top: 1px solid #e5e3df;
+        margin-top: 15px;
+        padding-top: 13px;
+    }
+
+    .project-detail span {
+        display: block;
+        color: #999;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .project-detail strong {
+        display: block;
+        color: #555;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    .project-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: #333;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        border-bottom: 1px solid #aaa;
+    }
+
+
+    /* =========================
+       BOTTOM CTA
+    ========================= */
+
+    .dashboard-footer {
+        background-color: #e7e5e0;
+        border: 1px solid #d0cec9;
+        padding: 25px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .dashboard-footer h2 {
+        margin: 0;
+        font-size: 25px;
+    }
+
+    .dashboard-footer p {
+        margin: 5px 0 0;
+        font-size: 12px;
+    }
+
+    .admin-button {
+        background-color: #303030;
+        color: white;
+        text-decoration: none;
+        padding: 11px 20px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .admin-button:hover {
+        background-color: #555;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1000px) {
+
+        .quick-access,
+        .statistics-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .employee-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 700px) {
+
+        .dashboard-hero {
+            padding: 35px 25px;
+        }
+
+        .dashboard-hero h1 {
+            font-size: 40px;
+        }
+
+        .quick-access,
+        .statistics-grid,
+        .employee-grid,
+        .project-list {
+            grid-template-columns: 1fr;
+        }
+
+        .section-heading {
+            display: block;
+        }
+
+        .section-heading span {
+            display: block;
+            margin-top: 5px;
+        }
+
+        .dashboard-footer {
+            display: block;
+        }
+
+        .admin-button {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    }
+
+</style>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="dashboard-hero">
+
+    <div class="hero-label">
+        Employee Project Management System
+    </div>
+
+    <h1>
+        Management Dashboard
+    </h1>
+
+    <div class="hero-line"></div>
+
+    <p class="hero-description">
+        A centralized workspace for monitoring employees,
+        managing projects, and keeping track of organizational
+        activity.
+    </p>
+
+</section>
+
+
+<!-- =========================
+     QUICK ACCESS
+========================= -->
+
+<section>
+
+    <div class="section-heading">
+
+        <h2>
+            Quick Access
+        </h2>
+
+        <span>
+            Navigate the system
+        </span>
+
+    </div>
+
+
+    <div class="quick-access">
+
+        <a
+            href="{% url 'employee_list' %}"
+            class="quick-button"
+        >
+
+            <div class="quick-icon">
+                E
+            </div>
+
+            <div class="quick-text">
+
+                <strong>
+                    Employees
+                </strong>
+
+                <span>
+                    View employee directory
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="{% url 'project_list' %}"
+            class="quick-button"
+        >
+
+            <div class="quick-icon">
+                P
+            </div>
+
+            <div class="quick-text">
+
+                <strong>
+                    Projects
+                </strong>
+
+                <span>
+                    View project directory
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="/admin/"
+            class="quick-button"
+        >
+
+            <div class="quick-icon">
+                A
+            </div>
+
+            <div class="quick-text">
+
+                <strong>
+                    Administration
+                </strong>
+
+                <span>
+                    Manage system data
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="{% url 'employee_list' %}"
+            class="quick-button"
+        >
+
+            <div class="quick-icon">
+                S
+            </div>
+
+            <div class="quick-text">
+
+                <strong>
+                    Search Employees
+                </strong>
+
+                <span>
+                    Find by department
+                </span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     STATISTICS
+========================= -->
+
+<section>
+
+    <div class="section-heading">
+
+        <h2>
+            Overview
+        </h2>
+
+        <span>
+            Live system statistics
+        </span>
+
+    </div>
+
+
+    <div class="statistics-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Employees
+            </div>
+
+            <div class="stat-number">
+                {{ total_employees }}
+            </div>
+
+            <div class="stat-description">
+                Registered employees
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Active Employees
+            </div>
+
+            <div class="stat-number">
+                {{ active_employees }}
+            </div>
+
+            <div class="stat-description">
+                Currently active
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Projects
+            </div>
+
+            <div class="stat-number">
+                {{ total_projects }}
+            </div>
+
+            <div class="stat-description">
+                Registered projects
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Completed Projects
+            </div>
+
+            <div class="stat-number">
+                {{ completed_projects }}
+            </div>
+
+            <div class="stat-description">
+                Successfully completed
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     LIVE EMPLOYEE DIRECTORY
+========================= -->
+
+<section class="employee-section">
+
+    <div class="section-heading">
+
+        <h2>
+            Current Employees
+        </h2>
+
+        <span>
+            Live employee directory
+        </span>
+
+    </div>
+
+
+    <div class="employee-grid">
+
+        {% for employee in employees %}
+
+        <div class="employee-card">
+
+            <div class="employee-top">
+
+                <div class="employee-avatar">
+                    {{ employee.name|first|upper }}
+                </div>
+
+
+                {% if employee.is_active %}
+
+                    <span class="employee-status active">
+                        Active
+                    </span>
+
+                {% else %}
+
+                    <span class="employee-status inactive">
+                        Inactive
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <h3>
+                {{ employee.name }}
+            </h3>
+
+
+            <div class="employee-designation">
+                {{ employee.designation }}
+            </div>
+
+
+            <div class="employee-info">
+
+                <div class="employee-info-row">
+
+                    <span class="employee-info-label">
+                        Employee ID
+                    </span>
+
+                    <span class="employee-info-value">
+                        {{ employee.employee_id }}
+                    </span>
+
+                </div>
+
+
+                <div class="employee-info-row">
+
+                    <span class="employee-info-label">
+                        Department
+                    </span>
+
+                    <span class="employee-info-value">
+                        {{ employee.department }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'employee_detail' employee.id %}"
+                class="employee-view"
+            >
+                View Profile →
+            </a>
+
+        </div>
+
+
+        {% empty %}
+
+        <div class="employee-card">
+
+            <h3>
+                No Employees
+            </h3>
+
+            <p>
+                No employees have been added to the system yet.
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PROJECT OVERVIEW
+========================= -->
+
+<section class="project-section">
+
+    <div class="section-heading">
+
+        <h2>
+            Project Overview
+        </h2>
+
+        <span>
+            Latest projects
+        </span>
+
+    </div>
+
+
+    <div class="project-list">
+
+        {% for project in projects %}
+
+        <div class="project-card">
+
+            <div class="project-card-top">
+
+                <div>
+
+                    <h3>
+                        {{ project.project_name }}
+                    </h3>
+
+                    <div class="project-client">
+                        {{ project.client_name }}
+                    </div>
+
+                </div>
+
+
+                <span class="project-status">
+                    {{ project.status }}
+                </span>
+
+            </div>
+
+
+            <div class="project-details">
+
+                <div class="project-detail">
+
+                    <span>
+                        Manager
+                    </span>
+
+                    <strong>
+
+                        {% if project.project_manager %}
+
+                            {{ project.project_manager.name }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="project-detail">
+
+                    <span>
+                        Start Date
+                    </span>
+
+                    <strong>
+                        {{ project.start_date }}
+                    </strong>
+
+                </div>
+
+
+                <div class="project-detail">
+
+                    <span>
+                        Team
+                    </span>
+
+                    <strong>
+                        {{ project.employees.count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'project_detail' project.id %}"
+                class="project-link"
+            >
+                View Project →
+            </a>
+
+        </div>
+
+
+        {% empty %}
+
+        <div class="project-card">
+
+            <h3>
+                No Projects
+            </h3>
+
+            <p>
+                No projects have been added to the system yet.
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ADMIN CTA
+========================= -->
+
+<section class="dashboard-footer">
+
+    <div>
+
+        <h2>
+            Manage Your Organization
+        </h2>
+
+        <p>
+            Add employees, create projects, assign teams,
+            and maintain system information through the
+            administration panel.
+        </p>
+
+    </div>
+
+
+    <a
+        href="/admin/"
+        class="admin-button"
+    >
+        Open Administration →
+    </a>
+
+</section>
+
 
 {% endblock %}

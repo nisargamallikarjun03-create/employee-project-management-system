@@ -1,61 +1,350 @@
 {% extends "base.html" %}
 
+{% block title %}
+{{ project.project_name }} | Project Details
+{% endblock %}
+
 {% block content %}
 
-<h1>Project Details</h1>
+<style>
+    .project-header {
+        border-bottom: 1px solid #c9c7c2;
+        padding-bottom: 25px;
+        margin-bottom: 30px;
+    }
 
-<p>
-    <strong>Project:</strong>
-    {{ project.project_name }}
-</p>
+    .project-label {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 12px;
+        color: #777;
+        margin-bottom: 8px;
+    }
 
-<p>
-    <strong>Client:</strong>
-    {{ project.client_name }}
-</p>
+    .project-header h1 {
+        margin: 0;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 46px;
+        font-weight: 600;
+        color: #292929;
+    }
 
-<p>
-    <strong>Description:</strong>
-    {{ project.description }}
-</p>
+    .project-line {
+        width: 60px;
+        height: 2px;
+        background-color: #555;
+        margin: 18px 0;
+    }
 
-<p>
-    <strong>Start Date:</strong>
-    {{ project.start_date }}
-</p>
+    .project-description {
+        color: #6b6965;
+        max-width: 700px;
+    }
 
-<p>
-    <strong>End Date:</strong>
-    {{ project.end_date }}
-</p>
+    .details-card {
+        background-color: #ffffff;
+        border: 1px solid #d5d3ce;
+        padding: 10px 35px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+    }
 
-<p>
-    <strong>Status:</strong>
-    {{ project.status }}
-</p>
+    .detail-row {
+        display: flex;
+        padding: 17px 0;
+        border-bottom: 1px solid #e5e3df;
+    }
 
-<p>
-    <strong>Project Manager:</strong>
-    {{ project.project_manager.name }}
-</p>
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        width: 220px;
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .detail-value {
+        color: #333;
+        font-size: 14px;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 5px 12px;
+        border: 1px solid #aaa;
+        background-color: #f7f6f3;
+        color: #444;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .team-heading {
+        margin-top: 45px;
+        margin-bottom: 20px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 32px;
+        color: #292929;
+    }
+
+    .team-card {
+        background-color: #ffffff;
+        border: 1px solid #d5d3ce;
+        padding: 25px 30px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .team-card ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .team-card li {
+        padding: 10px 0;
+        color: #555;
+    }
+
+    .employee-link {
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 2px;
+    }
+
+    .employee-link:hover {
+        color: #000;
+        border-color: #000;
+    }
+
+    .employee-designation {
+        color: #777;
+        font-size: 13px;
+        margin-left: 8px;
+    }
+
+    .no-team {
+        color: #777;
+        font-style: italic;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 25px;
+        color: #555;
+        text-decoration: none;
+        font-size: 14px;
+        border-bottom: 1px solid #999;
+        padding-bottom: 3px;
+    }
+
+    .back-link:hover {
+        color: #000;
+        border-color: #000;
+    }
+
+    @media (max-width: 700px) {
+
+        .project-header h1 {
+            font-size: 38px;
+        }
+
+        .details-card {
+            padding: 10px 20px;
+        }
+
+        .detail-row {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            width: 100%;
+        }
+
+        .employee-designation {
+            display: block;
+            margin-left: 0;
+            margin-top: 3px;
+        }
+    }
+</style>
 
 
-<h2>Team Members</h2>
+<section class="project-header">
 
-<ul>
+    <div class="project-label">
+        Project Profile
+    </div>
 
-    {% for employee in project.employees.all %}
+    <h1>
+        {{ project.project_name }}
+    </h1>
 
-        <li>
-            {{ employee.name }}
-        </li>
+    <div class="project-line"></div>
 
-    {% empty %}
+    <p class="project-description">
+        Detailed information about this project,
+        its timeline, management, and assigned team.
+    </p>
 
-        <li>No employees assigned.</li>
+</section>
 
-    {% endfor %}
 
-</ul>
+<div class="details-card">
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            Project Name
+        </div>
+
+        <div class="detail-value">
+            {{ project.project_name }}
+        </div>
+
+    </div>
+
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            Client Name
+        </div>
+
+        <div class="detail-value">
+            {{ project.client_name }}
+        </div>
+
+    </div>
+
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            Description
+        </div>
+
+        <div class="detail-value">
+            {{ project.description }}
+        </div>
+
+    </div>
+
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            Start Date
+        </div>
+
+        <div class="detail-value">
+            {{ project.start_date }}
+        </div>
+
+    </div>
+
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            End Date
+        </div>
+
+        <div class="detail-value">
+            {{ project.end_date }}
+        </div>
+
+    </div>
+
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            Status
+        </div>
+
+        <div class="detail-value">
+
+            <span class="status">
+                {{ project.status }}
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="detail-row">
+
+        <div class="detail-label">
+            Project Manager
+        </div>
+
+        <div class="detail-value">
+
+            {% if project.project_manager %}
+
+                {{ project.project_manager.name }}
+
+            {% else %}
+
+                Not Assigned
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<h2 class="team-heading">
+    Project Team
+</h2>
+
+
+<div class="team-card">
+
+    <ul>
+
+        {% for employee in project.employees.all %}
+
+            <li>
+
+                <a
+                    href="{% url 'employee_detail' employee.id %}"
+                    class="employee-link"
+                >
+                    {{ employee.name }}
+                </a>
+
+                <span class="employee-designation">
+                    {{ employee.designation }}
+                </span>
+
+            </li>
+
+        {% empty %}
+
+            <li class="no-team">
+                No employees have been assigned to this project.
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+</div>
+
+
+<a
+    href="{% url 'project_list' %}"
+    class="back-link"
+>
+    ← Back to Projects
+</a>
 
 {% endblock %}
